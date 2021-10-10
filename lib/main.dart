@@ -3,28 +3,17 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ババ抜きサドンデスクイズ',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'ババ抜きサドンデスクイズ'),
     );
   }
 }
@@ -32,84 +21,131 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+class _MyHomePageState extends State<MyHomePage> {
+
+  // 選択肢カード
+  List<Map<String, String>> choices = [
+    {
+      "choice": "夜に駆ける",
+      "answer": "true"
+    },
+    {
+      "choice": "おっぱい",
+      "answer": "true"
+    },
+    {
+      "choice": "ナンプラー\n日和",
+      "answer": "true"
+    },
+    {
+      "choice": "1987→",
+      "answer": "true"
+    },
+    {
+      "choice": "孫悟空",
+      "answer": "true"
+    },
+    {
+      "choice": "トンボ\n飛べなかった",
+      "answer": "false"
+    }
+  ];
+
+  // カードを並べた時の横の間隔
+  double _cardInterval = 200;
+
+  // 選択肢カードWidget作成
+  Widget createChoiceWidget(String? choice, String? answer){
+    if(choice == null){
+      print("[ERROR] choice is null");
+      choice = 'null';
+    }
+    if(answer == null){
+      print("[ERROR] answer is null");
+      answer = 'true';
+    }
+    return GestureDetector(
+            onTap: () {
+              if(answer == "true"){
+                print("正解！！");
+              }else if(answer == "false"){
+                print("ドボン！！！！！！");
+              }
+            },
+            child:Stack( //重ねる
+                alignment: AlignmentDirectional.center,
+                children: <Widget>[
+                  Container(
+                    height: 200,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  Text(
+                    choice,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  )
+                ]
+              )
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
+        child:Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
+            /* 問題文 */
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              "スピッツの曲を選べ（１つは不正解）",
+              style: TextStyle(
+                fontFamily: 'Kosugi',
+                fontSize: 40,
+                backgroundColor: Colors.amberAccent,
+              ),
             ),
-          ],
-        ),
+            /* 6つの選択肢を表にして表示する */
+            Table(
+              defaultColumnWidth: FixedColumnWidth(_cardInterval), // カードの横幅を指定
+              children:<TableRow>[
+                TableRow(
+                  children: <Widget>[
+                    createChoiceWidget(choices[0]["choice"], choices[0]["answer"]),
+                    createChoiceWidget(choices[1]["choice"], choices[1]["answer"]),
+                    createChoiceWidget(choices[2]["choice"], choices[2]["answer"]),
+                  ]
+                ),
+                TableRow(
+                  children: <Widget>[
+                    createChoiceWidget(choices[3]["choice"], choices[3]["answer"]),
+                    createChoiceWidget(choices[4]["choice"], choices[4]["answer"]),
+                    createChoiceWidget(choices[5]["choice"], choices[5]["answer"]),
+                  ]
+                )
+              ]
+            )
+          ]
+        )
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
