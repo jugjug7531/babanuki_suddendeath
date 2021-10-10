@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flip_card/flip_card.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,8 +59,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   ];
 
-  // カードを並べた時の横の間隔
+  // カードを並べた時の全体の横幅
   double _cardInterval = 200;
+  // カードの横幅
+  double _cardWidth = 150;
+  // カードの縦幅
+  double _cardHeight = 200;
+
 
   // 選択肢カードWidget作成
   Widget createChoiceWidget(String? choice, String? answer){
@@ -71,35 +77,61 @@ class _MyHomePageState extends State<MyHomePage> {
       print("[ERROR] answer is null");
       answer = 'true';
     }
-    return GestureDetector(
-            onTap: () {
-              if(answer == "true"){
-                print("正解！！");
-              }else if(answer == "false"){
-                print("ドボン！！！！！！");
-              }
-            },
-            child:Stack( //重ねる
-                alignment: AlignmentDirectional.center,
-                children: <Widget>[
-                  Container(
-                    height: 200,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+    return SizedBox(
+      width: _cardWidth,
+      height: _cardHeight,
+      child:Card(
+        elevation: 0.0,
+        margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 0.0),
+        color: Color(0x00000000),
+        child: FlipCard(
+          direction: FlipDirection.HORIZONTAL,
+          speed: 1000,
+          onFlipDone: (status) {
+            print(status);
+          },
+          front: Container(
+            decoration: BoxDecoration(
+              color: Color(0x000000),
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  choice,  //選択肢
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  Text(
-                    choice,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  )
-                ]
-              )
+                )
+              ],
+            ),
+          ),
+          back: Container(
+            decoration: BoxDecoration(
+              color: Color(0x000000),
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  answer,  //答え
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      )
     );
   }
 
@@ -111,7 +143,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child:Column(
-          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             /* 問題文 */
@@ -125,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             /* 6つの選択肢を表にして表示する */
             Table(
-              defaultColumnWidth: FixedColumnWidth(_cardInterval), // カードの横幅を指定
+              defaultColumnWidth: FixedColumnWidth(_cardInterval),
               children:<TableRow>[
                 TableRow(
                   children: <Widget>[
