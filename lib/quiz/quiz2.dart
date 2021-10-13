@@ -7,6 +7,10 @@ import 'quizBase.dart';
 class Quiz2 extends QuizBase {
 
   @override
+  // ルーティングのパス
+  static const path = '/2';
+
+  @override
   // 問題文
   String question = "スピッツの曲を選べ（１つは不正解）";
 

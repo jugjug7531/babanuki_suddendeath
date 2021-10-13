@@ -6,11 +6,15 @@ import 'package:flip_card/flip_card.dart';
  */
 class QuizBase extends StatelessWidget {
 
-  // 問題文
+  // ルーティングのパス(override必須)
+  static const path = '';
+
+  // 問題文(override必須)
   String question = "";
 
-  // 選択肢カード
+  // 選択肢カード(override必須)
   List<Map<String, String>> choices = [];
+
 
   // カードを並べた時の全体の横幅
   double _cardInterval = 200;
@@ -18,7 +22,6 @@ class QuizBase extends StatelessWidget {
   double _cardWidth = 150;
   // カードの縦幅
   double _cardHeight = 200;
-
 
   // 選択肢カードWidget作成
   Widget createChoiceWidget(String? choice, String? answer){
