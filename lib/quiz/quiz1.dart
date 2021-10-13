@@ -6,7 +6,9 @@ import 'quizBase.dart';
  */
 class Quiz1 extends QuizBase {
 
-  Quiz1();
+  @override
+  // ルーティングのパス
+  static const path = '/1';
 
   @override
   // 問題文

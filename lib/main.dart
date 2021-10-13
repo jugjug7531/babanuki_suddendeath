@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
       // ルーティングの一覧を設定
       routes: {
         '/': (context) => MyHomePage(title : title),
-        '/1': (context) => Quiz1(),
-        '/2': (context) => Quiz2(),
+        Quiz1.path: (context) => Quiz1(),
+        Quiz2.path: (context) => Quiz2(),
       },
     );
   }
@@ -80,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             /* 問題ページ一覧 */
-            questionButton(context, "問題１", '/1'),
-            questionButton(context, "問題２", '/2'),
+            questionButton(context, "問題１", Quiz1.path),
+            questionButton(context, "問題２", Quiz2.path),
           ]
         ),
       ),
