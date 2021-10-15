@@ -23,6 +23,9 @@ class QuizBase extends StatelessWidget {
   // カードの縦幅
   double _cardHeight = 200;
 
+  // 作成したカードの枚数をカウント
+  int _cardNumCount = 0;
+
   // 選択肢カードWidget作成
   Widget createChoiceWidget(String? choice, String? answer){
     if(choice == null){
@@ -33,6 +36,10 @@ class QuizBase extends StatelessWidget {
       print("[ERROR] answer is null");
       answer = 'true';
     }
+
+    //作成したカードの枚数をカウント
+    _cardNumCount++;
+
     return SizedBox(
       width: _cardWidth,
       height: _cardHeight,
@@ -47,17 +54,29 @@ class QuizBase extends StatelessWidget {
             //todo:効果音追加、ドボン時のエフェクト
             print(status);
           },
+          //カード表面
           front: Container(
             decoration: BoxDecoration(
               color: Color(0x000000),
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+            child: Stack(
+              children: <Widget>[ 
+                //選択肢
+                Center(
+                  child:Text(
+                        choice,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      )
+                ),
+                //カード番号
                 Text(
-                  choice,  //選択肢
+                  _cardNumCount.toString(),  
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -67,17 +86,44 @@ class QuizBase extends StatelessWidget {
               ],
             ),
           ),
+          //カード裏面
           back: Container(
             decoration: BoxDecoration(
               color: Color(0x000000),
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+
+            child: Stack(
+              children: <Widget>[ 
+                Center(
+                  child:Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      //選択肢
+                      Text(
+                        choice,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      //答え
+                      Text(
+                        answer,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  )
+                ),
+                //カード番号
                 Text(
-                  answer,  //答え
+                  _cardNumCount.toString(),  
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
