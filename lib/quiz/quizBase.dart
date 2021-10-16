@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 /**
  * ドボンクイズの基底クラス
@@ -22,17 +23,45 @@ class QuizBase extends StatelessWidget {
   double _cardWidth = 150;
   // カードの縦幅
   double _cardHeight = 200;
+  //正解カードの背景画像パス
+  String _correct_image = 'images/correct.png';
+  //不正解カードの背景画像パス
+  String _wrong_image = 'images/wrong.png';
+  //正解時の効果音
+  String _correct_bgm = 'sounds/correct.mp3';
+  //不正解時の効果音
+  String _wrong_bgm = 'sounds/wrong.mp3';
+
+  // 作成したカードの枚数をカウント
+  int _cardNumCount = 0;
+  // カード裏面の選択肢の文字色
+  Color _backside_choice_color = Colors.black;
+  // 正誤画像のパス
+  String _judge_image = "";
 
   // 選択肢カードWidget作成
-  Widget createChoiceWidget(String? choice, String? answer){
-    if(choice == null){
-      print("[ERROR] choice is null");
-      choice = 'null';
+  //Widget createChoiceWidget(String? choice, String? answer){
+  Widget createChoiceWidget(Map<String, String> quiz){
+
+    String choice = quiz["choice"].toString();
+    String answer = quiz["answer"].toString();
+    String explanation = quiz["explanation"].toString();
+
+    // AudioPlayerインスタンスの初期化
+    AudioPlayer _audioPlayer = AudioPlayer();
+
+    //作成したカードの枚数をカウント
+    _cardNumCount++;
+
+    //正解・不正解に応じて裏面のデザインを変更
+    if(answer == "true"){
+      _backside_choice_color = Colors.red;
+      _judge_image = _correct_image;
+    }else{
+      _backside_choice_color = Colors.blue;
+      _judge_image = _wrong_image;
     }
-    if(answer == null){
-      print("[ERROR] answer is null");
-      answer = 'true';
-    }
+
     return SizedBox(
       width: _cardWidth,
       height: _cardHeight,
@@ -44,20 +73,39 @@ class QuizBase extends StatelessWidget {
           direction: FlipDirection.HORIZONTAL,
           speed: 1000,
           onFlipDone: (status) {
-            //todo:効果音追加、ドボン時のエフェクト
-            print(status);
+            //裏面のとき
+            if(status){
+              //正誤判定の効果音を鳴らす
+              if(answer == "true"){
+                _audioPlayer.play(_correct_bgm, isLocal: true);
+              }else if(answer == "false"){
+                _audioPlayer.play(_wrong_bgm, isLocal: true);
+              }
+            }
           },
+          //カード表面
           front: Container(
             decoration: BoxDecoration(
               color: Color(0x000000),
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+            child: Stack(
+              children: <Widget>[ 
+                //選択肢
+                Center(
+                  child:Text(
+                        choice,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      )
+                ),
+                //カード番号
                 Text(
-                  choice,  //選択肢
+                  _cardNumCount.toString(),  
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -67,17 +115,49 @@ class QuizBase extends StatelessWidget {
               ],
             ),
           ),
+          //カード裏面
           back: Container(
             decoration: BoxDecoration(
               color: Color(0x000000),
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: <Widget>[
+                //背景画像
+                Image(
+                  image: AssetImage(_judge_image),
+                  // fit: BoxFit.cover,
+                ),
+                //文字
+                Center(
+                  child:Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      //選択肢
+                      Text(
+                        choice,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: _backside_choice_color,
+                        ),
+                      ),
+                      //解説
+                      Text(
+                        explanation,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  )
+                ),
+                //カード番号
                 Text(
-                  answer,  //答え
+                  _cardNumCount.toString(),  
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -118,16 +198,16 @@ class QuizBase extends StatelessWidget {
               children:<TableRow>[
                 TableRow(
                   children: <Widget>[
-                    createChoiceWidget(choices[0]["choice"], choices[0]["answer"]),
-                    createChoiceWidget(choices[1]["choice"], choices[1]["answer"]),
-                    createChoiceWidget(choices[2]["choice"], choices[2]["answer"]),
+                    createChoiceWidget(choices[0]),
+                    createChoiceWidget(choices[1]),
+                    createChoiceWidget(choices[2]),
                   ]
                 ),
                 TableRow(
                   children: <Widget>[
-                    createChoiceWidget(choices[3]["choice"], choices[3]["answer"]),
-                    createChoiceWidget(choices[4]["choice"], choices[4]["answer"]),
-                    createChoiceWidget(choices[5]["choice"], choices[5]["answer"]),
+                    createChoiceWidget(choices[3]),
+                    createChoiceWidget(choices[4]),
+                    createChoiceWidget(choices[5]),
                   ]
                 )
               ]
