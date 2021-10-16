@@ -47,8 +47,8 @@ class QuizBase extends StatelessWidget {
     String answer = quiz["answer"].toString();
     String explanation = quiz["explanation"].toString();
 
-    // AudioPlayerインスタンスの初期化
-    AudioPlayer _audioPlayer = AudioPlayer();
+    // AudioCacheインスタンスの初期化
+    AudioCache _player = AudioCache();
 
     //作成したカードの枚数をカウント
     _cardNumCount++;
@@ -77,9 +77,9 @@ class QuizBase extends StatelessWidget {
             if(status){
               //正誤判定の効果音を鳴らす
               if(answer == "true"){
-                _audioPlayer.play(_correct_bgm);
+                _player.play(_correct_bgm);
               }else if(answer == "false"){
-                _audioPlayer.play(_wrong_bgm);
+                _player.play(_wrong_bgm);
               }
             }
           },
@@ -213,11 +213,18 @@ class QuizBase extends StatelessWidget {
               ]
             ),
             /* タイトル画面に戻るボタン */
-            TextButton(
-              child: Text("問題選択ページに戻る"),
-              onPressed: (){
-                Navigator.pop(context);
-              },
+            Padding(
+              padding: EdgeInsets.all(30),
+              child: ElevatedButton(
+                child: const Text('問題選択ページに戻る'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  onPrimary: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ]
         ),
