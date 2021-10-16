@@ -32594,7 +32594,7 @@ $1(a){return new F.kv("\u30d0\u30d0\u629c\u304d\u30b5\u30c9\u30f3\u30c7\u30b9\u3
 $S:124}
 F.QK.prototype={
 $1(a){var s=t.N,r=t.A7
-return new S.n0(H.a([P.aq(["choice","\u9752\u68ee\u770c","explanation","\u30ea\u30f3\u30b4\u6709\u540d","answer","true"],s,s),P.aq(["choice","\u79cb\u7530\u770c","explanation","\u304d\u308a\u305f\u3093\u307d\u6709\u540d","answer","true"],s,s),P.aq(["choice","\u5bae\u5d0e\u770c","explanation","\u4e5d\u5dde\u5730\u65b9\u3067\u3059","answer","false"],s,s),P.aq(["choice","\u5ca9\u624b\u770c","explanation","\u308f\u3093\u3053\u305d\u3070\u6709\u540d","answer","true"],s,s),P.aq(["choice","\u5c71\u68a8\u770c","explanation","\u679c\u7269\u6709\u540d","answer","true"],s,s),P.aq(["choice","\u798f\u5cf6\u770c","explanation","\u559c\u591a\u65b9\u30e9\u30fc\u30e1\u30f3\u6709\u540d","answer","true"],s,s)],r),H.a([],r),C.l,null)},
+return new S.n0(H.a([P.aq(["choice","\u9752\u68ee\u770c","explanation","\u30ea\u30f3\u30b4\u6709\u540d","answer","true"],s,s),P.aq(["choice","\u79cb\u7530\u770c","explanation","\u304d\u308a\u305f\u3093\u307d\u6709\u540d","answer","true"],s,s),P.aq(["choice","\u5bae\u5d0e\u770c","explanation","\u4e5d\u5dde\u5730\u65b9\u3067\u3059","answer","false"],s,s),P.aq(["choice","\u5ca9\u624b\u770c","explanation","\u308f\u3093\u3053\u305d\u3070\u6709\u540d","answer","true"],s,s),P.aq(["choice","\u5c71\u5f62\u770c","explanation","\u679c\u7269\u6709\u540d","answer","true"],s,s),P.aq(["choice","\u798f\u5cf6\u770c","explanation","\u559c\u591a\u65b9\u30e9\u30fc\u30e1\u30f3\u6709\u540d","answer","true"],s,s)],r),H.a([],r),C.l,null)},
 $S:125}
 F.QL.prototype={
 $1(a){var s=t.N,r=t.A7
