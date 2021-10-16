@@ -38,7 +38,7 @@ class Quiz1 extends QuizBase {
       "answer": "true"
     },
     {
-      "choice": "山梨県",
+      "choice": "山形県",
       "explanation" : "果物有名",
       "answer": "true"
     },
