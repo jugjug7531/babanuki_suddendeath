@@ -22,12 +22,26 @@ class QuizBase extends StatelessWidget {
   double _cardWidth = 150;
   // カードの縦幅
   double _cardHeight = 200;
+  //正解カードの背景画像パス
+  String _correct_image = 'images/correct.png';
+  //不正解カードの背景画像パス
+  String _wrong_image = 'images/wrong.png';
 
   // 作成したカードの枚数をカウント
   int _cardNumCount = 0;
+  // カード裏面の選択肢の文字色
+  Color _backside_choice_color = Colors.black;
+  // 正誤画像のパス
+  String _judge_image = "";
 
   // 選択肢カードWidget作成
-  Widget createChoiceWidget(String? choice, String? answer){
+  //Widget createChoiceWidget(String? choice, String? answer){
+  Widget createChoiceWidget(Map<String, String> quiz){
+
+    String choice = quiz["choice"].toString();
+    String answer = quiz["answer"].toString();
+    String explanation = quiz["explanation"].toString();
+
     if(choice == null){
       print("[ERROR] choice is null");
       choice = 'null';
@@ -39,6 +53,15 @@ class QuizBase extends StatelessWidget {
 
     //作成したカードの枚数をカウント
     _cardNumCount++;
+
+    //正解・不正解に応じて裏面のデザインを変更
+    if(answer == "true"){
+      _backside_choice_color = Colors.red;
+      _judge_image = _correct_image;
+    }else{
+      _backside_choice_color = Colors.blue;
+      _judge_image = _wrong_image;
+    }
 
     return SizedBox(
       width: _cardWidth,
@@ -93,9 +116,14 @@ class QuizBase extends StatelessWidget {
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
-
             child: Stack(
-              children: <Widget>[ 
+              children: <Widget>[
+                //背景画像
+                Image(
+                  image: AssetImage(_judge_image),
+                  // fit: BoxFit.cover,
+                ),
+                //文字
                 Center(
                   child:Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -106,12 +134,12 @@ class QuizBase extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: _backside_choice_color,
                         ),
                       ),
-                      //答え
+                      //解説
                       Text(
-                        answer,
+                        explanation,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -164,16 +192,16 @@ class QuizBase extends StatelessWidget {
               children:<TableRow>[
                 TableRow(
                   children: <Widget>[
-                    createChoiceWidget(choices[0]["choice"], choices[0]["answer"]),
-                    createChoiceWidget(choices[1]["choice"], choices[1]["answer"]),
-                    createChoiceWidget(choices[2]["choice"], choices[2]["answer"]),
+                    createChoiceWidget(choices[0]),
+                    createChoiceWidget(choices[1]),
+                    createChoiceWidget(choices[2]),
                   ]
                 ),
                 TableRow(
                   children: <Widget>[
-                    createChoiceWidget(choices[3]["choice"], choices[3]["answer"]),
-                    createChoiceWidget(choices[4]["choice"], choices[4]["answer"]),
-                    createChoiceWidget(choices[5]["choice"], choices[5]["answer"]),
+                    createChoiceWidget(choices[3]),
+                    createChoiceWidget(choices[4]),
+                    createChoiceWidget(choices[5]),
                   ]
                 )
               ]
