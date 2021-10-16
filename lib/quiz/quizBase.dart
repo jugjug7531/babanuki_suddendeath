@@ -24,9 +24,9 @@ class QuizBase extends StatelessWidget {
   // カードの縦幅
   double _cardHeight = 200;
   //正解カードの背景画像パス
-  String _correct_image = 'images/correct.png';
+  String _correct_image = 'assets/images/correct.png';
   //不正解カードの背景画像パス
-  String _wrong_image = 'images/wrong.png';
+  String _wrong_image = 'assets/images/wrong.png';
   //正解時の効果音
   String _correct_bgm = 'sounds/correct.mp3';
   //不正解時の効果音
