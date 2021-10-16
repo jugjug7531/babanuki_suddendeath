@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 /**
  * ドボンクイズの基底クラス
@@ -26,6 +27,10 @@ class QuizBase extends StatelessWidget {
   String _correct_image = 'images/correct.png';
   //不正解カードの背景画像パス
   String _wrong_image = 'images/wrong.png';
+  //正解時の効果音
+  String _correct_bgm = 'sounds/correct.mp3';
+  //不正解時の効果音
+  String _wrong_bgm = 'sounds/wrong.mp3';
 
   // 作成したカードの枚数をカウント
   int _cardNumCount = 0;
@@ -42,14 +47,8 @@ class QuizBase extends StatelessWidget {
     String answer = quiz["answer"].toString();
     String explanation = quiz["explanation"].toString();
 
-    if(choice == null){
-      print("[ERROR] choice is null");
-      choice = 'null';
-    }
-    if(answer == null){
-      print("[ERROR] answer is null");
-      answer = 'true';
-    }
+    // AudioPlayerインスタンスの初期化
+    AudioPlayer _audioPlayer = AudioPlayer();
 
     //作成したカードの枚数をカウント
     _cardNumCount++;
@@ -74,8 +73,15 @@ class QuizBase extends StatelessWidget {
           direction: FlipDirection.HORIZONTAL,
           speed: 1000,
           onFlipDone: (status) {
-            //todo:効果音追加、ドボン時のエフェクト
-            print(status);
+            //裏面のとき
+            if(status){
+              //正誤判定の効果音を鳴らす
+              if(answer == "true"){
+                _audioPlayer.play(_correct_bgm, isLocal: true);
+              }else if(answer == "false"){
+                _audioPlayer.play(_wrong_bgm, isLocal: true);
+              }
+            }
           },
           //カード表面
           front: Container(
