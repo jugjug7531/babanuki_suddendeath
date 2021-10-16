@@ -32619,8 +32619,8 @@ ghs(){return this.dy}}
 T.AR.prototype={
 jo(a){var s,r,q,p,o=this,n=null,m=a.i(0,"choice"),l=a.i(0,"answer"),k=a.i(0,"explanation");++o.ch
 if(l==="true"){o.cx=C.CK
-o.cy="images/correct.png"}else{o.cx=C.dB
-o.cy="images/wrong.png"}s=F.a68(C.l)
+o.cy="assets/images/correct.png"}else{o.cx=C.dB
+o.cy="assets/images/wrong.png"}s=F.a68(C.l)
 r=K.a67(new P.bD(8,8))
 q=t.p
 r=M.pw(n,T.to(C.cK,H.a([T.lZ(L.fQ(m,A.eo(n,n,C.l,n,n,n,n,n,n,n,n,24,n,C.ar,n,n,!0,n,n,n,n,n,n,n,n),n,n),n,n),L.fQ(C.h.h(o.ch),A.eo(n,n,C.l,n,n,n,n,n,n,n,n,24,n,C.ar,n,n,!0,n,n,n,n,n,n,n,n),n,n)],q),C.bV),n,new S.e8(new P.F(0),n,s,r,n,n,C.a2),n,n,n)
