@@ -77,9 +77,9 @@ class QuizBase extends StatelessWidget {
             if(status){
               //正誤判定の効果音を鳴らす
               if(answer == "true"){
-                _audioPlayer.play(_correct_bgm, isLocal: true);
+                _audioPlayer.play(_correct_bgm);
               }else if(answer == "false"){
-                _audioPlayer.play(_wrong_bgm, isLocal: true);
+                _audioPlayer.play(_wrong_bgm);
               }
             }
           },
