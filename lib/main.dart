@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flip_card/flip_card.dart';
 
-import 'quiz/quiz1.dart';
-import 'quiz/quiz2.dart';
+import 'quiz/quiz_1.dart';
+import 'quiz/quiz_2.dart';
 
 
 void main() {
@@ -51,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return TextButton(
       child: Text(
         questionName,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Kosugi',
           fontSize: 40,
         ),
@@ -73,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child:Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               "問題選択",
               style: TextStyle(
                 fontSize: 50,

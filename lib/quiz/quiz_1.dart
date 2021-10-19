@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'quizBase.dart';
+import 'quiz_base.dart';
 
-/**
- * 1問目のドボン問題クラス
- */
+///
+/// 1問目のドボン問題クラス
+///
+/// オーバーライド必須
+/// - [path] ルーティングパス 
+/// - [question] 問題文 
+/// - [choices] 選択肢カード
+
 class Quiz1 extends QuizBase {
+  Quiz1({Key? key}) : super(key: key);
 
-  @override
-  // ルーティングのパス
-  static const path = '/1';
+  /// ルーティングのパス
+  static const String path = '/1';
 
-  @override
-  // 問題文
-  String question = "東北地方の県を選べ（１つは不正解）";
+  /// 問題文
+  final String question = "東北地方の県を選べ（１つは不正解）";
 
-  @override
-  // 選択肢カード
-  List<Map<String, String>> choices = [
+  /// 選択肢カード
+  final List<Map<String, String>> choices = [
     {
       "choice": "青森県",
       "explanation" : "リンゴ有名",
@@ -48,4 +51,10 @@ class Quiz1 extends QuizBase {
       "answer": "true"
     }
   ];
+
+  ///
+  @override 
+  String getPath(){
+    return path;
+  }
 }

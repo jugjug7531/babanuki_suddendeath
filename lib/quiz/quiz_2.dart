@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'quizBase.dart';
+import 'quiz_base.dart';
 
-/**
- * 2問目のドボン問題クラス
- */
+///
+/// 2問目のドボン問題クラス
+/// 
+/// オーバーライド必須
+/// - [path] ルーティングパス 
+/// - [question] 問題文 
+/// - [choices] 選択肢カード
+
 class Quiz2 extends QuizBase {
+  Quiz2({Key? key}) : super(key: key);
 
-  @override
-  // ルーティングのパス
-  static const path = '/2';
+  /// ルーティングのパス
+  static const String path = '/2';
 
-  @override
-  // 問題文
-  String question = "スピッツの曲を選べ（１つは不正解）";
+  /// 問題文
+  final String question = "スピッツの曲を選べ（１つは不正解）";
 
-  @override
-  // 選択肢カード
-  List<Map<String, String>> choices = [
+  /// 選択肢カード
+  final List<Map<String, String>> choices = [
     {
       "choice": "夜を駆ける",
       "explanation" : "2002年発売",
