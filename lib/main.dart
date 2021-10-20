@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'quiz/quiz_1.dart';
 import 'quiz/quiz_2.dart';
+import 'quiz_edit.dart';
 
 
 void main() {
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => MyHomePage(title : title),
         Quiz1.path: (context) => Quiz1(),
         Quiz2.path: (context) => Quiz2(),
+        QuizEdit.path: (context) => QuizEdit(),
       },
     );
   }
@@ -52,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
         questionName,
         style: const TextStyle(
           fontFamily: 'Kosugi',
-          fontSize: 40,
+          fontSize: 30,
         ),
       ),
       onPressed: (){
@@ -75,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               "問題選択",
               style: TextStyle(
-                fontSize: 50,
+                fontSize: 40,
               ),
             ),
             /* 問題ページ一覧 */
@@ -83,6 +85,14 @@ class _MyHomePageState extends State<MyHomePage> {
             questionButton(context, "問題２", Quiz2.path),
           ]
         ),
+      ),
+      // クイズ編集ページ移動ボタン
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('Edit'),
+        icon: const Icon(Icons.edit),
+        onPressed: (){
+          Navigator.pushNamed(context, QuizEdit.path);
+        },
       ),
     );
   }
