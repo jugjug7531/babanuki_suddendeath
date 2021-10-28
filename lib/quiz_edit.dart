@@ -53,6 +53,8 @@ class _QuizEditState extends State<QuizEdit> {
   ];
   /// 問題番号
   int questionNumber = 0;
+  /// 選択肢の数(quiz_baseにも関わるため別のところで定義すべき？)
+  final int choiceTotalNum = 6;
 
   /// 問題入力欄Widget
   Widget questionTextField(int questionNum){
@@ -65,7 +67,7 @@ class _QuizEditState extends State<QuizEdit> {
           labelText: '問題',
         ),
         onChanged: (String value){
-          print("問題 : ${value}");
+          debugPrint("問題 : ${value}");
           questions[questionNum]['question'] = value;        
         },
       )          
@@ -75,7 +77,7 @@ class _QuizEditState extends State<QuizEdit> {
   /// 選択肢入力欄Widget
   Widget choiceTextField(int questionNum, int choiceNum){
     return Container(
-      margin: const EdgeInsets.only(top: 10, left: 30, right: 30),
+      margin: const EdgeInsets.only(top: 5, left: 30, right: 30, bottom: 5),
       child: TextField(
         controller: TextEditingController(text: questions[choiceNum]['choice']), 
         decoration: const InputDecoration(
@@ -83,7 +85,7 @@ class _QuizEditState extends State<QuizEdit> {
           labelText: '選択肢',
         ),
         onChanged: (String value){
-          print("選択肢${choiceNum} : ${value}");
+          debugPrint("選択肢${choiceNum} : ${value}");
           questions[choiceNum]['choice'] = value;
         },
       )
@@ -93,7 +95,7 @@ class _QuizEditState extends State<QuizEdit> {
   ///解説入力欄Widget
   Widget explainTextField(int questionNum, int choiceNum){
     return Container(
-      margin: const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
+      margin: const EdgeInsets.only(top: 5, left: 30, right: 30, bottom: 5),
       child: TextField(
         controller: TextEditingController(text: questions[choiceNum]['explanation']), 
         decoration: const InputDecoration(
@@ -101,7 +103,7 @@ class _QuizEditState extends State<QuizEdit> {
           labelText: '解説',
         ),
         onChanged: (String value){
-          print("解説${choiceNum} : ${value}");
+          debugPrint("解説${choiceNum} : ${value}");
           questions[choiceNum]['explanation'] = value;
         },
       )          
@@ -110,27 +112,50 @@ class _QuizEditState extends State<QuizEdit> {
 
   @override
   Widget build(BuildContext context) {
+    ///選択肢全体
+    List<Widget> choiceForm = [];
+
+    for(int i = 0; i < choiceTotalNum; i++){
+      choiceForm.add(choiceTextField(questionNumber, i));
+      choiceForm.add(explainTextField(questionNumber, i));
+      choiceForm.add(const SizedBox(height: 15));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body:ListView (
         children: <Widget>[
-          const Text("問題"),
+          const SizedBox(height: 10),
+          // "問題"テキスト
+          Container(
+            margin: const EdgeInsets.only(left: 10),
+            child: const Text(
+              "問題",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              )
+            )
+          ),
+          // 問題文入力欄
           questionTextField(questionNumber),
-          const Text("選択肢"),
-          choiceTextField(questionNumber, 0),
-          explainTextField(questionNumber, 0),
-          choiceTextField(questionNumber, 1),
-          explainTextField(questionNumber, 1),
-          choiceTextField(questionNumber, 2),
-          explainTextField(questionNumber, 2),
-          choiceTextField(questionNumber, 3),
-          explainTextField(questionNumber, 3),
-          choiceTextField(questionNumber, 4),
-          explainTextField(questionNumber, 4),
-          choiceTextField(questionNumber, 5),
-          explainTextField(questionNumber, 5),
+          const SizedBox(height: 20),
+          // "選択肢"テキスト
+          Container(
+            margin: const EdgeInsets.only(left: 10),
+            child: const Text(
+              "選択肢",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              )
+            )
+          ),
+          const SizedBox(height: 10),
+          //全選択肢入力欄
+          Column(children:choiceForm)
         ],
       ),
       // クイズ保存ボタン
@@ -138,7 +163,7 @@ class _QuizEditState extends State<QuizEdit> {
         label: const Text('Save'),
         icon: const Icon(Icons.save),
         onPressed: (){
-          print("保存する処理を実装する");
+          debugPrint("保存する処理を実装する");
         },
       ) 
     );

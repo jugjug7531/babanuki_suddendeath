@@ -127,8 +127,10 @@ class QuizBase extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 // 背景画像
-                Image(
-                  image: AssetImage(_judgeImage),
+                Center(
+                  child:Image(
+                    image: AssetImage(_judgeImage),
+                  )
                 ),
                 // 文字
                 Center(
@@ -212,19 +214,17 @@ class QuizBase extends StatelessWidget {
                 )
               ]
             ),
+            const SizedBox(height: 30),
             // タイトル画面に戻るボタン
-            Padding(
-              padding: const EdgeInsets.all(30),
-              child: ElevatedButton(
-                child: const Text('問題選択ページに戻る'),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+            ElevatedButton(
+              child: const Text('問題選択ページに戻る'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                onPrimary: Colors.white,
               ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ]
         ),
