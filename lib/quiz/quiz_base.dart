@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+import '../question.dart';
+
 /// ドボンクイズの基底クラス
 
 class QuizBase extends StatelessWidget {
   QuizBase({Key? key}) : super(key: key);
 
-  /// ルーティングのパス(override必須)
-  static const String path = '';
+  /// ルーティングのパス
+  static const String path = '/question';
 
-  /// 問題文(override必須)
+  /// 問題文
   final String question = "";
 
-  /// 選択肢カード(override必須)
+  /// 選択肢カード
   final List<Map<String, String>> choices = [];
 
 
@@ -38,16 +40,12 @@ class QuizBase extends StatelessWidget {
   }
 
   /// 選択肢カードWidget作成
-  Widget createChoiceWidget(Map<String, String> quiz, int cardNumCount){
+  Widget createChoiceWidget(Choice choice, int cardNumCount){
 
     /// カード裏面の選択肢の文字色
     Color _backsideChoiceColor = Colors.black;
     /// 正誤画像のパス
     String _judgeImage = "";
-
-    String choice = quiz["choice"].toString();
-    String answer = quiz["answer"].toString();
-    String explanation = quiz["explanation"].toString();
 
     /// AudioCacheインスタンスの初期化
     AudioCache _player = AudioCache();
@@ -56,7 +54,7 @@ class QuizBase extends StatelessWidget {
     cardNumCount++;
 
     // 正解・不正解に応じて裏面のデザインを変更
-    if(answer == "true"){
+    if(choice.answer == "true"){
       _backsideChoiceColor = Colors.red;
       _judgeImage = correctImage;
     }else{
@@ -78,9 +76,9 @@ class QuizBase extends StatelessWidget {
             // 裏面のとき
             if(status){
               // 正誤判定の効果音を鳴らす
-              if(answer == "true"){
+              if(choice.answer == "true"){
                 _player.play(correctBgm);
-              }else if(answer == "false"){
+              }else if(choice.answer == "false"){
                 _player.play(wrongBgm);
               }
             }
@@ -97,7 +95,7 @@ class QuizBase extends StatelessWidget {
                 // 選択肢
                 Center(
                   child:Text(
-                        choice,
+                        choice.choice,
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -139,7 +137,7 @@ class QuizBase extends StatelessWidget {
                     children: <Widget>[
                       // 選択肢
                       Text(
-                        choice,
+                        choice.choice,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -148,7 +146,7 @@ class QuizBase extends StatelessWidget {
                       ),
                       // 解説
                       Text(
-                        explanation,
+                        choice.explanation,
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -177,6 +175,9 @@ class QuizBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // `ModalRoute.of()`メソッドを使用してページ遷移時の引数を取得
+    final args = ModalRoute.of(context)!.settings.arguments as Question;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("問題"),
@@ -187,7 +188,7 @@ class QuizBase extends StatelessWidget {
           children: <Widget>[
             // 問題文
             Text(
-              question,
+              args.problemStatement,
               style: const TextStyle(
                 fontFamily: 'Kosugi',
                 fontSize: 40,
@@ -200,16 +201,16 @@ class QuizBase extends StatelessWidget {
               children:<TableRow>[
                 TableRow(
                   children: <Widget>[
-                    createChoiceWidget(choices[0], 0),
-                    createChoiceWidget(choices[1], 1),
-                    createChoiceWidget(choices[2], 2),
+                    createChoiceWidget(args.choices[0], 0),
+                    createChoiceWidget(args.choices[1], 1),
+                    createChoiceWidget(args.choices[2], 2),
                   ]
                 ),
                 TableRow(
                   children: <Widget>[
-                    createChoiceWidget(choices[3], 3),
-                    createChoiceWidget(choices[4], 4),
-                    createChoiceWidget(choices[5], 5),
+                    createChoiceWidget(args.choices[3], 3),
+                    createChoiceWidget(args.choices[4], 4),
+                    createChoiceWidget(args.choices[5], 5),
                   ]
                 )
               ]

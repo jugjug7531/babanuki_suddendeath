@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'quiz/quiz_1.dart';
-import 'quiz/quiz_2.dart';
+import 'quiz/quiz_base.dart';
 import 'quiz_edit.dart';
 
+import 'question.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,8 +27,7 @@ class MyApp extends StatelessWidget {
       // ルーティングの一覧を設定
       routes: {
         '/': (context) => MyHomePage(title : title),
-        Quiz1.path: (context) => Quiz1(),
-        Quiz2.path: (context) => Quiz2(),
+        QuizBase.path: (context) => QuizBase(),
         QuizEdit.path: (context) => QuizEdit(),
       },
     );
@@ -36,9 +35,85 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
+
+  //暫定：ここに問題を置く
+  final List<Question> questions = [
+    Question(
+      "Q1 都道府県",
+      "東北地方の県を選べ（１つは不正解）",
+      [
+        Choice(
+          "青森県",
+          "リンゴ有名",
+          "true"
+        ),
+        Choice(
+          "秋田県",
+          "きりたんぽ有名",
+          "true"
+        ),
+        Choice(
+          "宮崎県",
+          "九州地方です",
+          "false"
+        ),
+        Choice(
+          "岩手県",
+          "わんこそば有名",
+          "true"
+        ),
+        Choice(
+          "山形県",
+          "果物有名",
+          "true"
+        ),
+        Choice(
+          "福島県",
+          "喜多方ラーメン有名",
+          "true"
+        )
+      ]
+    ),
+    Question(
+      "Q2 単位",
+      "SI基本単位を選べ（２つは不正解）",
+      [
+        Choice(
+          "メートル(m)",
+          "長さ",
+          "true"
+        ),
+        Choice(
+          "ニュートン(N)",
+          "力",
+          "false"
+        ),
+        Choice(
+          "ケルビン(K)",
+          "熱力学温度",
+          "true"
+        ),
+        Choice(
+          "ボルト(V)",
+          "電圧. 電流(I)はSI基本単位",
+          "false"
+        ),
+        Choice(
+          "秒(s)",
+          "時間",
+          "true"
+        ),
+        Choice(
+          "カンデラ(cd)",
+          "光度",
+          "true"
+        )
+      ]
+    )
+  ];
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -47,11 +122,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  /* 問題選択ボタン */
-  Widget questionButton(BuildContext context, String questionName, String questionPage){
+  // 問題選択ボタン
+  Widget questionButton(BuildContext context, String questionPage, Question arg){
     return TextButton(
       child: Text(
-        questionName,
+        arg.title,
         style: const TextStyle(
           fontFamily: 'Kosugi',
           fontSize: 30,
@@ -59,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       onPressed: (){
         //指定した画面に遷移する
-        Navigator.pushNamed(context, questionPage);
+        Navigator.pushNamed(context, questionPage, arguments: arg);
       },
     );
   }
@@ -80,9 +155,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontSize: 40,
               ),
             ),
-            /* 問題ページ一覧 */
-            questionButton(context, "問題１", Quiz1.path),
-            questionButton(context, "問題２", Quiz2.path),
+            // 問題ページ一覧
+            for(int i = 0; i < widget.questions.length; i++)
+              questionButton(context, QuizBase.path, widget.questions[i])
           ]
         ),
       ),
