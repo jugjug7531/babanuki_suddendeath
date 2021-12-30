@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
         label: const Text('Edit'),
         icon: const Icon(Icons.edit),
         onPressed: (){
-          Navigator.pushNamed(context, QuizEdit.path);
+          Navigator.pushNamed(context, QuizEdit.path, arguments: widget.questions);
         },
       ),
     );
