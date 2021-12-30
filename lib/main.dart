@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert'; //jsonDecode()を使用するため
+import 'dart:async' show Future;
 
 import 'quiz/quiz_base.dart';
 import 'quiz_edit.dart';
-
-import 'question.dart';
+import 'model/question.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,82 +41,46 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-  //暫定：ここに問題を置く
-  final List<Question> questions = [
+  /// 問題リスト(jsonファイルから読み込む)
+  Questions questions = Questions(questionList: [
     Question(
-      "Q1 都道府県",
-      "東北地方の県を選べ（１つは不正解）",
-      [
+      title: "Q1 都道府県",
+      problemStatement: "東北地方の県を選べ（１つは不正解）",
+      choices: [
         Choice(
-          "青森県",
-          "リンゴ有名",
-          "true"
+          choice: "青森県",
+          explanation: "リンゴ有名",
+          answer: "true"
         ),
         Choice(
-          "秋田県",
-          "きりたんぽ有名",
-          "true"
+          choice: "秋田県",
+          explanation: "きりたんぽ有名",
+          answer: "true"
         ),
         Choice(
-          "宮崎県",
-          "九州地方です",
-          "false"
+          choice: "宮崎県",
+          explanation: "九州地方です",
+          answer: "false"
         ),
         Choice(
-          "岩手県",
-          "わんこそば有名",
-          "true"
+          choice: "岩手県",
+          explanation: "わんこそば有名",
+          answer: "true"
         ),
         Choice(
-          "山形県",
-          "果物有名",
-          "true"
+          choice: "山形県",
+          explanation: "果物有名",
+          answer: "true"
         ),
         Choice(
-          "福島県",
-          "喜多方ラーメン有名",
-          "true"
-        )
-      ]
-    ),
-    Question(
-      "Q2 単位",
-      "SI基本単位を選べ（２つは不正解）",
-      [
-        Choice(
-          "メートル(m)",
-          "長さ",
-          "true"
-        ),
-        Choice(
-          "ニュートン(N)",
-          "力",
-          "false"
-        ),
-        Choice(
-          "ケルビン(K)",
-          "熱力学温度",
-          "true"
-        ),
-        Choice(
-          "ボルト(V)",
-          "電圧. 電流(I)はSI基本単位",
-          "false"
-        ),
-        Choice(
-          "秒(s)",
-          "時間",
-          "true"
-        ),
-        Choice(
-          "カンデラ(cd)",
-          "光度",
-          "true"
+          choice: "福島県",
+          explanation: "喜多方ラーメン有名",
+          answer: "true"
         )
       ]
     )
-  ];
-
+  ]);
+  
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -122,7 +88,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  // 問題選択ボタン
+  /// jsonファイルを読み込み
+  Future<String> _jsonFileLoad() async {
+    const String path = 'json/quiz.json';
+    String jsonString = "";
+    try {
+      jsonString = await rootBundle.loadString(path);
+    } on FlutterError {
+      //print('Faild to open $path');
+    }
+    return jsonString;
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    // jsonファイルから問題を読み込む
+    _jsonFileLoad().then((value) {
+      setState(() {
+        widget.questions = Questions.fromJson(jsonDecode(value));
+      });
+    });
+  }
+
+  /// 問題選択ボタン
   Widget questionButton(BuildContext context, String questionPage, Question arg){
     return TextButton(
       child: Text(
@@ -156,8 +145,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             // 問題ページ一覧
-            for(int i = 0; i < widget.questions.length; i++)
-              questionButton(context, QuizBase.path, widget.questions[i])
+            for(int i = 0; i < widget.questions.questionList.length; i++)
+              questionButton(context, QuizBase.path, widget.questions.questionList[i])
           ]
         ),
       ),

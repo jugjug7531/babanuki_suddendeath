@@ -1,0 +1,76 @@
+{
+    "questionList" : [
+        {
+            "title" : "Q1 都道府県",
+            "problemStatement" : "東北地方の県を選べ（１つは不正解）",
+            "choices" : [
+                {
+                    "choice" : "青森県",
+                    "explanation" : "リンゴ有名",
+                    "answer" : "true"
+                },
+                {
+                    "choice" : "秋田県",
+                    "explanation" : "きりたんぽ有名",
+                    "answer" : "true"
+                },
+                {
+                    "choice" : "宮崎県",
+                    "explanation" : "九州地方です",
+                    "answer" : "false"
+                },
+                {
+                    "choice" : "岩手県",
+                    "explanation" : "わんこそば有名",
+                    "answer" : "true"
+                },
+                {
+                    "choice" : "山形県",
+                    "explanation" : "果物有名",
+                    "answer" : "true"
+                },
+                {
+                    "choice" : "福島県",
+                    "explanation" : "喜多方ラーメン有名",
+                    "answer" : "true"
+                }
+            ]
+        },
+        {
+            "title" : "Q2 単位",
+            "problemStatement" : "SI基本単位を選べ（２つは不正解）",
+            "choices" : [
+                {
+                    "choice" : "メートル(m)",
+                    "explanation" : "長さ",
+                    "answer" : "true"
+                },
+                {
+                    "choice" : "ニュートン(N)",
+                    "explanation" : "力",
+                    "answer" : "false"
+                },
+                {
+                    "choice" : "ケルビン(K)",
+                    "explanation" : "熱力学温度",
+                    "answer" : "true"
+                },
+                {
+                    "choice" : "ボルト(V)",
+                    "explanation" : "電圧. 電流(I}はSI基本単位",
+                    "answer" : "false"
+                },
+                {
+                    "choice" : "秒(s)",
+                    "explanation" : "時間",
+                    "answer" : "true"
+                },
+                {
+                    "choice" : "カンデラ(cd)",
+                    "explanation" : "光度",
+                    "answer" : "true"
+                }
+            ]
+        }
+    ]
+}

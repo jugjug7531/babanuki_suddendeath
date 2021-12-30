@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-import '../question.dart';
+import '../model/question.dart';
 
 /// ドボンクイズの基底クラス
 
@@ -201,16 +201,14 @@ class QuizBase extends StatelessWidget {
               children:<TableRow>[
                 TableRow(
                   children: <Widget>[
-                    createChoiceWidget(args.choices[0], 0),
-                    createChoiceWidget(args.choices[1], 1),
-                    createChoiceWidget(args.choices[2], 2),
+                    for(var index in [0,1,2])
+                      createChoiceWidget(args.choices[index], index)
                   ]
                 ),
                 TableRow(
                   children: <Widget>[
-                    createChoiceWidget(args.choices[3], 3),
-                    createChoiceWidget(args.choices[4], 4),
-                    createChoiceWidget(args.choices[5], 5),
+                    for(var index in [3,4,5])
+                      createChoiceWidget(args.choices[index], index)
                   ]
                 )
               ]
