@@ -20,6 +20,9 @@ class QuizEdit extends StatefulWidget {
   /// 編集するクイズのリストインデックス
   int argsQuizIndex = 0;
 
+  /// トグル表示更新用の選択肢正誤リスト
+  List<bool> isCorrect = [];
+
   @override
   State<QuizEdit> createState() => _QuizEditState();
 }
@@ -113,6 +116,27 @@ class _QuizEditState extends State<QuizEdit> {
           );
   }
   
+  /// 選択肢の正誤設定ボタン
+  Widget setChoiceAnswerButton(Choice choice, int index){
+    return Switch(
+            value: widget.isCorrect[index],
+            activeColor: Colors.orange,
+            activeTrackColor: Colors.red,
+            inactiveThumbColor: Colors.blue,
+            inactiveTrackColor: Colors.green,
+            onChanged: (val){
+              if(val==true){
+                choice.answer = "true";
+              }else{
+                choice.answer = "false";
+              }
+              setState(() {
+                widget.isCorrect[index] = val;
+              }); 
+            },
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     // `ModalRoute.of()`メソッドを使用してページ遷移時の引数を取得
@@ -129,8 +153,47 @@ class _QuizEditState extends State<QuizEdit> {
       quizTitleList.add(question.title);
     }
 
+    // トグル表示更新用選択肢正誤リストの初期化
+    widget.isCorrect.clear();
+    for(int i = 0; i < args.questionList[widget.argsQuizIndex].choices.length; i++){
+      widget.isCorrect.add(args.questionList[widget.argsQuizIndex].choices[i].answer == "true");
+    }
+      
     // 選択肢欄の作成
     for(int i = 0; i < args.questionList[widget.argsQuizIndex].choices.length; i++){
+      choiceForm.add(
+        // 選択肢の正誤設定
+        Container(
+          margin: const EdgeInsets.only(left: 30, right: 30, bottom: 5),
+          child:Row(
+            children: [
+              Text(
+                "選択肢"+(i+1).toString()+": ",
+                style: const TextStyle(
+                  fontSize: 16,
+                )
+              ),
+              const Text(
+                "X",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue
+                )
+              ),
+              setChoiceAnswerButton(args.questionList[widget.argsQuizIndex].choices[i], i),
+              const Text(
+                "O",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red
+                )
+              ),
+            ],
+          )
+        )
+      );
       choiceForm.add(choiceTextField(args.questionList[widget.argsQuizIndex].choices[i]));
       choiceForm.add(explainTextField(args.questionList[widget.argsQuizIndex].choices[i]));
       choiceForm.add(const SizedBox(height: 15));
