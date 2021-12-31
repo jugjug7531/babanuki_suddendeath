@@ -1,7 +1,11 @@
-//import 'dart:html';
+import 'dart:typed_data';
+import 'dart:convert';
 
 import 'package:babanuki_suddendeath/model/question.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // 現在日時をString型に変換
+import 'package:file_selector/file_selector.dart'; //ファイルの保存と読み込み
+import "package:universal_html/html.dart" as html;
 
 /// クイズ作成ページ
 /// 
@@ -112,7 +116,7 @@ class _QuizEditState extends State<QuizEdit> {
   @override
   Widget build(BuildContext context) {
     // `ModalRoute.of()`メソッドを使用してページ遷移時の引数を取得
-    final args = ModalRoute.of(context)!.settings.arguments as Questions;
+    Questions args = ModalRoute.of(context)!.settings.arguments as Questions;
 
     // 選択肢全体
     List<Widget> choiceForm = [];
@@ -150,11 +154,27 @@ class _QuizEditState extends State<QuizEdit> {
               )
             )
           ),
-          // 編集する問題を選ぶボタン
-          Container(
-            margin: const EdgeInsets.only(left: 30, right: 30),
-            child:quizDropDownButton(quizTitleList),
-          ),
+          // 水平に並べる
+          Row(
+            children: [
+              // 編集する問題を選ぶボタン
+              Container(
+                margin: const EdgeInsets.only(left: 30, right: 30),
+                child:quizDropDownButton(quizTitleList),
+              ),
+              // タイトル画面に戻るボタン
+              ElevatedButton(
+                child: const Text('問題選択ページに戻る'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  onPrimary: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),  
           const SizedBox(height: 10),
           // "問題"テキスト
           Container(
@@ -188,10 +208,31 @@ class _QuizEditState extends State<QuizEdit> {
       ),
       // クイズ保存ボタン
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Save'),
-        icon: const Icon(Icons.save),
-        onPressed: (){
-          debugPrint("保存する処理を実装する");
+        label: const Text('Download'),
+        icon: const Icon(Icons.download),
+        onPressed: () async {
+          String? path = await getSavePath(acceptedTypeGroups: [
+            XTypeGroup(label: 'json', extensions: ['json'])
+          ], suggestedName: "babanuki_quiz.json");
+          if (path == null) {
+            return;
+          }
+          if (path == "") { // 空文字の場合、AnchorElementでDLリンクを作成 → 発火
+            // ファイル名に入れる現在日時を取得
+            DateTime now = DateTime.now();
+            String nowString = DateFormat('yyyyMMddHHmmss').format(now); 
+            final anchor = html.AnchorElement(
+              href: "data:application/json;charset=utf-8," +
+                jsonEncode(args.toJson()));
+            anchor.download = nowString+"_babanukiQuiz.json";
+            anchor.click();
+          } else {
+            final data =
+                Uint8List.fromList(json.encode(args.toJson()).codeUnits);
+            const mimeType = "application/json";
+            final file = XFile.fromData(data, mimeType: mimeType);
+            await file.saveTo(path);
+          }
         },
       ) 
     );

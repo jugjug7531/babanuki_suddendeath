@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:file_selector/file_selector.dart'; //ファイルの保存と読み込み
 import 'dart:convert'; //jsonDecode()を使用するため
 import 'dart:async' show Future;
 
@@ -138,6 +139,30 @@ class _MyHomePageState extends State<MyHomePage> {
         child:Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // ファイル読み込みボタン
+            ElevatedButton(
+              child: const Text('問題ファイル読み込み'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.grey,
+                onPrimary: Colors.black,
+              ),
+              onPressed: () async {
+                final XTypeGroup typeGroup = XTypeGroup(
+                  label: 'json',
+                  extensions: ['json'],
+                );
+                final XFile? file =
+                  await openFile(acceptedTypeGroups: [typeGroup]);
+                if (file == null) {
+                  return;
+                }
+                final String fileContent = await file.readAsString();
+                setState(() {
+                  widget.questions = Questions.fromJson(jsonDecode(fileContent));
+                });
+              },
+            ),
+            const SizedBox(height: 10),
             const Text(
               "問題選択",
               style: TextStyle(
