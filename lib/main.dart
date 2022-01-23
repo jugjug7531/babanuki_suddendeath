@@ -5,7 +5,8 @@ import 'dart:convert'; //jsonDecode()を使用するため
 import 'dart:async' show Future;
 
 import 'quiz/quiz_base.dart';
-import 'quiz_edit.dart';
+import 'edit/quiz_list_page.dart';
+import 'edit/quiz_edit.dart';
 import 'model/question.dart';
 
 void main() {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => MyHomePage(title : title),
         QuizBase.path: (context) => QuizBase(),
+        QuizListPage.path: (context) => const QuizListPage(),
         QuizEdit.path: (context) => QuizEdit(),
       },
     );
@@ -177,10 +179,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       // クイズ編集ページ移動ボタン
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: "list",
         label: const Text('Edit'),
         icon: const Icon(Icons.edit),
         onPressed: (){
-          Navigator.pushNamed(context, QuizEdit.path, arguments: widget.questions);
+          Navigator.pushNamed(context, QuizListPage.path, arguments: widget.questions);
         },
       ),
     );

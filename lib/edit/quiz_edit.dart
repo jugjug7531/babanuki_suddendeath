@@ -15,10 +15,7 @@ class QuizEdit extends StatefulWidget {
   QuizEdit({Key? key}) : super(key: key);
 
   final String title = 'クイズ作成';
-  static const String path = '/edit/';
-
-  /// 編集するクイズのリストインデックス
-  int argsQuizIndex = 0;
+  static const String path = '/edit';
 
   /// トグル表示更新用の選択肢正誤リスト
   List<bool> isCorrect = [];
@@ -82,40 +79,6 @@ class _QuizEditState extends State<QuizEdit> {
     );
   }
 
-  /// 問題選択用ドロップダウンボタン
-  Widget quizDropDownButton(List<String> quizTitleList){
-    return DropdownButton<String>(
-            value: quizTitleList[widget.argsQuizIndex],
-            icon: const Icon(Icons.list),
-            elevation: 16,
-            style: const TextStyle(
-              color: Colors.deepPurple,
-              fontSize: 18
-            ),
-            underline: Container(
-              height: 2,
-              color: Colors.deepPurpleAccent,
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                int val = quizTitleList.indexOf(newValue!);
-                if(val != -1){
-                  widget.argsQuizIndex = val;
-                }else{
-                  widget.argsQuizIndex = 0;
-                }
-              });
-            },
-            items: quizTitleList
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          );
-  }
-  
   /// 選択肢の正誤設定ボタン
   Widget setChoiceAnswerButton(Choice choice, int index){
     return Switch(
@@ -140,27 +103,19 @@ class _QuizEditState extends State<QuizEdit> {
   @override
   Widget build(BuildContext context) {
     // `ModalRoute.of()`メソッドを使用してページ遷移時の引数を取得
-    Questions args = ModalRoute.of(context)!.settings.arguments as Questions;
+    Question args = ModalRoute.of(context)!.settings.arguments as Question;
 
     // 選択肢全体
     List<Widget> choiceForm = [];
 
-    // 問題タイトルリスト
-    List<String> quizTitleList = [];
-
-    // 問題タイトルリスト作成
-    for(var question in args.questionList){
-      quizTitleList.add(question.title);
-    }
-
     // トグル表示更新用選択肢正誤リストの初期化
     widget.isCorrect.clear();
-    for(int i = 0; i < args.questionList[widget.argsQuizIndex].choices.length; i++){
-      widget.isCorrect.add(args.questionList[widget.argsQuizIndex].choices[i].answer == "true");
+    for(int i = 0; i < args.choices.length; i++){
+      widget.isCorrect.add(args.choices[i].answer == "true");
     }
       
     // 選択肢欄の作成
-    for(int i = 0; i < args.questionList[widget.argsQuizIndex].choices.length; i++){
+    for(int i = 0; i < args.choices.length; i++){
       choiceForm.add(
         // 選択肢の正誤設定
         Container(
@@ -181,7 +136,7 @@ class _QuizEditState extends State<QuizEdit> {
                   color: Colors.blue
                 )
               ),
-              setChoiceAnswerButton(args.questionList[widget.argsQuizIndex].choices[i], i),
+              setChoiceAnswerButton(args.choices[i], i),
               const Text(
                 "O",
                 style: TextStyle(
@@ -194,8 +149,8 @@ class _QuizEditState extends State<QuizEdit> {
           )
         )
       );
-      choiceForm.add(choiceTextField(args.questionList[widget.argsQuizIndex].choices[i]));
-      choiceForm.add(explainTextField(args.questionList[widget.argsQuizIndex].choices[i]));
+      choiceForm.add(choiceTextField(args.choices[i]));
+      choiceForm.add(explainTextField(args.choices[i]));
       choiceForm.add(const SizedBox(height: 15));
     }
 
@@ -220,11 +175,6 @@ class _QuizEditState extends State<QuizEdit> {
           // 水平に並べる
           Row(
             children: [
-              // 編集する問題を選ぶボタン
-              Container(
-                margin: const EdgeInsets.only(left: 30, right: 30),
-                child:quizDropDownButton(quizTitleList),
-              ),
               // タイトル画面に戻るボタン
               ElevatedButton(
                 child: const Text('問題選択ページに戻る'),
@@ -251,7 +201,7 @@ class _QuizEditState extends State<QuizEdit> {
             )
           ),
           // 問題文入力欄
-          questionTextField(args.questionList[widget.argsQuizIndex]),
+          questionTextField(args),
           const SizedBox(height: 20),
           // "選択肢"テキスト
           Container(
